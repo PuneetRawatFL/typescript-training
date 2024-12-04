@@ -90,3 +90,191 @@ intf({ name: "Puneet", email: "puneet@gmail.com", password: "12345", age: 23 });
 interface Admin extends User {
     isAdmin: boolean;
 }
+
+//type aliases - lets you create new name for a type
+//eg
+type abc = number; //creating new name for type 'number'
+let x: abc; //assigning type abc(number) to variable x
+//eg2 - useful case
+type value = string | number | null; //value can be any of the mentioned types
+let z: value; //assigning type value(string | number | null) to variable z
+
+//intersection - allows us to combine multiple types into single type
+//eg
+type customer = { name: string; email: string };
+//combining customer type and admin type
+type admin = customer & {
+    password: string;
+};
+type intersection = admin;
+const adminUser: intersection = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    password: "securepassword123",
+};
+console.log(adminUser); //adminUser will have all the types combined
+
+// ------------------------------------------------------------------------------------------- //
+
+// classes in typescript
+class person1 {
+    name = " Puneet";
+    age = 23;
+    gender = "male";
+}
+let p1 = new person1(); //output: person1 { name: ' Puneet', age: 23, gender: 'male' }
+
+//class with constructor
+class person2 {
+    constructor(
+        public name: string,
+        public age: number,
+        public gender: string
+    ) {}
+}
+let p2 = new person2("Person 2", 24, "female"); // output: person2 { name: 'Person 2', age: 24, gender: 'female' }
+
+//class with constructor with default values
+class person3 {
+    constructor(
+        public name: string,
+        public age: number,
+        public gender: string,
+        public isAdult: boolean = true
+    ) {}
+}
+let p3 = new person3("Person 2", 24, "female"); // output: person3 { name: 'Person 2', age: 24, gender: 'female' }
+let p4 = new person3("Person 2", 24, "female", false); // output: person3 { name: 'Person 2', age: 24, gender: 'female', false }
+
+//access modifiers - public, private, protected
+//public - can be accessed withtin and outside class
+//private - can be accessed within the class only
+//protected - can be accessed within the class and its subclasses
+
+class parentClass {
+    public name;
+    private age = 0;
+    protected gender = "male";
+    constructor(name: string) {
+        this.name = name;
+    }
+    getDetails() {
+        console.log(this.name);
+    }
+}
+class childClass extends parentClass {
+    constructor(public gender: string, public readonly name: string) {
+        //readonly ensures that name cannot be assigned when outside the class
+        super(name);
+    }
+    changeDetails() {
+        this.age = 12; //error as age is a private property
+        this.gender = "female"; // no error as gender is protected property and can be used within subclass
+    }
+}
+let parent1 = new parentClass("John");
+console.log(parent1.name); // output: john
+console.log(parent1.gender); //error: gender is protected property
+
+//getter and setter
+// typescript uses 'get' and 'set' keywords for getter and setter respectively
+class User1 {
+    constructor(public _name: string, public email: string) {}
+
+    //getter in ts
+    get name() {
+        return this._name;
+    }
+
+    //setter in ts
+    set name(value: string) {
+        this._name = value;
+    }
+}
+//creating object
+let u1 = new User1("Kate", "kate@gmail.com");
+
+//we can set name by calling setter method like a property
+u1.name = "Mary";
+
+//we can get name by calling getter method like a property
+u1.name; //output: Mary
+
+//
+//static members
+//static values can be used without creating instance of the class
+//static members do not get included in the instance of the class
+//eg
+class mobile {
+    static model = 15;
+
+    static getModelName() {
+        return "iphone";
+    }
+}
+mobile.model; //output: 15
+mobile.getModelName(); //output: iphone
+
+//
+//abstract classes and methods
+//designed to be extended by other classes and is not instantiated directly
+abstract class car {
+    abstract startCar(): void;
+
+    move() {
+        console.log("moving");
+    }
+}
+
+class electricCar extends car {
+    startCar(): void {
+        console.log("Electric car starting");
+    }
+}
+let e1 = new electricCar();
+e1.startCar(); //output: electric car starting
+e1.move(); //output: moving
+
+//
+//functions
+//we need to mention return type
+function fn1(): void {
+    console.log("this is a function");
+}
+//function with return type
+function fn2(): number {
+    return 12;
+}
+//function with parameter
+function fn3(value: string): void {
+    console.log(value);
+}
+//function accepting callback as a parameter
+//cb is a callback funtion
+function fn4(value: string, cb: (num: number) => void): void {
+    console.log(value);
+
+    //calling callback function
+    cb(12);
+}
+fn4("with callback", (num: number) => {
+    console.log(num);
+});
+
+//rest parameters
+//can accept any number of arguments
+function restPara(...args: number[]) {
+    console.log(args);
+    console.log("rest parameters");
+}
+restPara(1, 2, 3, 4, 5, 6);
+
+//function overloading
+function add(a: string, b: string): string;
+function add(a: number, b: number): number;
+
+function add(a: any, b: any): any {
+    return a + b;
+}
+add("Hello", "World");
+add(11, 12);

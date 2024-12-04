@@ -1,3 +1,18 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 //Data types
 // Primitive Data Types
 // - number
@@ -65,3 +80,96 @@ function intf(obj) {
 }
 intf({ name: "Puneet", email: "puneet@gmail.com", password: "12345" });
 intf({ name: "Puneet", email: "puneet@gmail.com", password: "12345", age: 23 });
+// classes in typescript
+var person1 = /** @class */ (function () {
+    function person1() {
+        this.name = " Puneet";
+        this.age = 23;
+        this.gender = "male";
+    }
+    return person1;
+}());
+var p1 = new person1(); //output: person1 { name: ' Puneet', age: 23, gender: 'male' }
+//class with constructor
+var person2 = /** @class */ (function () {
+    function person2(name, age, gender) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+    }
+    return person2;
+}());
+var p2 = new person2("Person 2", 24, "female"); // output: person2 { name: 'Person 2', age: 24, gender: 'female' }
+//class with constructor with default values
+var person3 = /** @class */ (function () {
+    function person3(name, age, gender, isAdult) {
+        if (isAdult === void 0) { isAdult = true; }
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.isAdult = isAdult;
+    }
+    return person3;
+}());
+var p3 = new person3("Person 2", 24, "female"); // output: person3 { name: 'Person 2', age: 24, gender: 'female' }
+var p4 = new person3("Person 2", 24, "female", false); // output: person3 { name: 'Person 2', age: 24, gender: 'female', false }
+//access modifiers - public, private, protected
+//public - can be accessed withtin and outside class
+//private - can be accessed within the class only
+//protected - can be accessed within the class and its subclasses
+var parentClass = /** @class */ (function () {
+    function parentClass(name) {
+        this.age = 0;
+        this.gender = "male";
+        this.name = name;
+    }
+    parentClass.prototype.getDetails = function () {
+        console.log(this.name);
+    };
+    return parentClass;
+}());
+var childClass = /** @class */ (function (_super) {
+    __extends(childClass, _super);
+    function childClass(gender, name) {
+        //readonly ensures that name cannot be assigned when outside the class
+        var _this = _super.call(this, name) || this;
+        _this.gender = gender;
+        _this.name = name;
+        return _this;
+    }
+    childClass.prototype.changeDetails = function () {
+        this.age = 12; //error as age is a private property
+        this.gender = "female"; // no error as gender is protected property and can be used within subclass
+    };
+    return childClass;
+}(parentClass));
+var parent1 = new parentClass("John");
+console.log(parent1.name); // output: john
+console.log(parent1.gender); //error: gender is protected property
+//getter and setter
+// typescript uses 'get' and 'set' keywords for getter and setter respectively
+var User1 = /** @class */ (function () {
+    function User1(_name, email) {
+        this._name = _name;
+        this.email = email;
+    }
+    Object.defineProperty(User1.prototype, "name", {
+        //getter in ts
+        get: function () {
+            return this._name;
+        },
+        //setter in ts
+        set: function (value) {
+            this._name = value;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    return User1;
+}());
+//creating object
+var u1 = new User1("Kate", "kate@gmail.com");
+//we can set name by calling setter method like a property
+u1.name = "Mary";
+//we can get name by calling getter method like a property
+u1.name; //output: Mary
