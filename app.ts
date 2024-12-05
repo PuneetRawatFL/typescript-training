@@ -278,3 +278,203 @@ function add(a: any, b: any): any {
 }
 add("Hello", "World");
 add(11, 12);
+
+//
+//generrics - lets us create reusable components with different data types
+//eg - generic functions
+function log<T>(arg: T) {
+    console.log(arg);
+}
+log<string>("Hello"); //calling for type string
+log<number>(12); //calling for type number
+
+//generic interfaces
+interface genInterface<T> {
+    name: string;
+    age: number;
+    key: T;
+}
+function genInter(obj: genInterface<string>) {}
+
+genInter({ name: "Puneet", age: 23, key: "jdfjdkjf" });
+
+//generic classes
+class genClass<T> {
+    constructor(public key: T) {}
+}
+let g1 = new genClass<string>("1234");
+console.log(g1);
+
+//modules
+//import function
+import { addPayment } from "./payment";
+addPayment(12);
+
+//import class with default export
+import Payment from "./payment";
+let pay1 = new Payment(24);
+
+//type assertion - when we know more about the type of a value
+let assert: any;
+
+(assert as string).toLowerCase; // now i can use string methods
+(<string>assert).toLowerCase; //another way
+
+//type casting - converting one type into another
+//eg1
+let cast: any = "This is a string";
+let len: number = (cast as string).length;
+console.log(len);
+
+//eg2 number to string
+let num1: number = 42;
+let str1: string = String(num1); // conversion to string
+console.log(typeof str1, str1);
+
+//eg3 - string to number
+let str2: string = "20";
+let num2: number = parseInt(str2); //conversion to number
+console.log(typeof num2, num2);
+
+//Utility types
+//1. partial <T>
+interface utility1 {
+    name: string;
+    age: number;
+    email: string;
+}
+type partialUtility = Partial<utility1>;
+//we can pass partial properties as all properties are optional
+let partialUser: partialUtility = {
+    email: "partial@gmail.com",
+};
+
+//2. Required<T>
+interface utility2 {
+    name?: string;
+    age?: number;
+    email?: string;
+}
+type requiredUtility = Required<utility2>;
+//all properties are required even after providing optional property
+let requiredUser: requiredUtility = {
+    name: "Puneet",
+    age: 23,
+    email: "puneet@gmail.com",
+};
+
+//3. Readonly<T>
+interface utility3 {
+    name: string;
+    age: number;
+    email: string;
+}
+type readonlyUtility = Readonly<utility3>;
+
+let readonlyUser: readonlyUtility = {
+    name: "Puneet",
+    age: 23,
+    email: "puneet@gmail.com",
+};
+// readonlyUser.name = "new name"; // error as it is only a read only property
+
+//4. Record<K,T>
+type roles = "admin" | "user" | "guest";
+
+type recordUtility = Record<roles, string>; //all the roles will have the type string now
+
+let recordUser: recordUtility = {
+    admin: "Alice",
+    user: "Bob",
+    guest: "claire",
+};
+
+//5. Pick<K,T>
+type utility5 = {
+    name: string;
+    age: number;
+    email: string;
+};
+
+//we can pick set of properties according to our wish
+type pickUtility = Pick<utility5, "name" | "email">;
+
+let pickUser: pickUtility = {
+    name: "Puneet",
+    email: "email",
+};
+
+//6. Omit<K,T>
+type utility6 = {
+    name: string;
+    age: number;
+    email: string;
+};
+//we can remove set of properties we want to remove
+type omitUtility = Omit<utility6, "email">;
+
+let omitUser: omitUtility = {
+    name: "puneet",
+    age: 23,
+};
+
+//7. Exclude<T,U>
+type T1 = "a" | "b" | "c";
+type U1 = "b";
+//excludes the common propeties
+type excludeUtility = Exclude<T1, U1>;
+
+let excludeUser: excludeUtility = "a"; // only "a" and "c" can be assigned
+
+//8. Extract<T,U>
+type T2 = "a" | "b" | "c";
+type U2 = "b";
+//only common properties can be assigned
+type extractUtility = Extract<T2, U2>;
+
+let extractUser: extractUtility = "b"; //only b can be assigned
+
+//9. NonNullabe<T>
+type T3 = string | number | null | undefined;
+
+type nonNullUtility = NonNullable<T3>;
+//we cannot assign null or undefined
+let nonNullUser: nonNullUtility = 12; // only string or number can be assigned
+
+//10. ReturnType<T>
+//we use return type to create a type that matches the return type of a function
+function getUser() {
+    return {
+        name: "ace",
+        age: 23,
+        email: "email",
+    };
+}
+//assigning the return type of function
+type returnUtility = ReturnType<typeof getUser>;
+
+let returnUser: returnUtility = {
+    name: "Hello",
+    age: 35,
+    email: "email",
+};
+
+//TS Union Types
+// - allow us to specify that a value can be one of several types
+//eg1 - union with type
+let value: string | number;
+
+value = "Hello"; // valid
+value = 42; // valid
+// value = true; // error: Type 'boolean' is not assignable to type 'string | number'
+
+//eg2 - union with function
+function printId(id: string | number): void {
+    console.log(id);
+}
+
+printId("123"); // Output: ID: 123
+printId(123); // Output: ID: 123
+
+//eg3 -  array of mixed types
+let mixedArray: (string | number)[] = ["Alice", 30, "Bob", 25];

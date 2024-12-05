@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 //Data types
 // Primitive Data Types
 // - number
@@ -80,6 +82,15 @@ function intf(obj) {
 }
 intf({ name: "Puneet", email: "puneet@gmail.com", password: "12345" });
 intf({ name: "Puneet", email: "puneet@gmail.com", password: "12345", age: 23 });
+var x; //assigning type abc(number) to variable x
+var z; //assigning type value(string | number | null) to variable z
+var adminUser = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    password: "securepassword123",
+};
+console.log(adminUser); //adminUser will have all the types combined
+// ------------------------------------------------------------------------------------------- //
 // classes in typescript
 var person1 = /** @class */ (function () {
     function person1() {
@@ -173,3 +184,106 @@ var u1 = new User1("Kate", "kate@gmail.com");
 u1.name = "Mary";
 //we can get name by calling getter method like a property
 u1.name; //output: Mary
+//
+//static members
+//static values can be used without creating instance of the class
+//static members do not get included in the instance of the class
+//eg
+var mobile = /** @class */ (function () {
+    function mobile() {
+    }
+    mobile.getModelName = function () {
+        return "iphone";
+    };
+    mobile.model = 15;
+    return mobile;
+}());
+mobile.model; //output: 15
+mobile.getModelName(); //output: iphone
+//
+//abstract classes and methods
+//designed to be extended by other classes and is not instantiated directly
+var car = /** @class */ (function () {
+    function car() {
+    }
+    car.prototype.move = function () {
+        console.log("moving");
+    };
+    return car;
+}());
+var electricCar = /** @class */ (function (_super) {
+    __extends(electricCar, _super);
+    function electricCar() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    electricCar.prototype.startCar = function () {
+        console.log("Electric car starting");
+    };
+    return electricCar;
+}(car));
+var e1 = new electricCar();
+e1.startCar(); //output: electric car starting
+e1.move(); //output: moving
+//
+//functions
+//we need to mention return type
+function fn1() {
+    console.log("this is a function");
+}
+//function with return type
+function fn2() {
+    return 12;
+}
+//function with parameter
+function fn3(value) {
+    console.log(value);
+}
+//function accepting callback as a parameter
+//cb is a callback funtion
+function fn4(value, cb) {
+    console.log(value);
+    //calling callback function
+    cb(12);
+}
+fn4("with callback", function (num) {
+    console.log(num);
+});
+//rest parameters
+//can accept any number of arguments
+function restPara() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    console.log(args);
+    console.log("rest parameters");
+}
+restPara(1, 2, 3, 4, 5, 6);
+function add(a, b) {
+    return a + b;
+}
+add("Hello", "World");
+add(11, 12);
+//
+//generrics - lets us create reusable components with different data types
+//eg - generic functions
+function log(arg) {
+    console.log(arg);
+}
+log("Hello"); //calling for type string
+log(12); //calling for type number
+function genInter(obj) { }
+genInter({ name: "Puneet", age: 23, key: "jdfjdkjf" });
+//generic classes
+var genClass = /** @class */ (function () {
+    function genClass(key) {
+        this.key = key;
+    }
+    return genClass;
+}());
+var g1 = new genClass("1234");
+console.log(g1);
+//modules
+//import function
+var payment_1 = require("./payment");
+(0, payment_1.addPayment)(12);
